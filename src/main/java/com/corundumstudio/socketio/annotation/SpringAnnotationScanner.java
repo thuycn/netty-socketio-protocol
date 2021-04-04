@@ -15,6 +15,7 @@
  */
 package com.corundumstudio.socketio.annotation;
 
+import com.corundumstudio.socketio.listener.ClientListeners;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -25,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.MethodCallback;
 import org.springframework.util.ReflectionUtils.MethodFilter;
@@ -50,10 +52,15 @@ public class SpringAnnotationScanner implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (originalBeanClass != null) {
-            socketIOServer.addListeners(bean, originalBeanClass);
+            String namespace = getNamespace(bean);
+            ClientListeners clientListeners =
+                namespace.isEmpty() ? socketIOServer : socketIOServer.addNamespace(namespace);
+            clientListeners.addListeners(bean, originalBeanClass);
+
             log.info("{} bean listeners added", beanName);
             originalBeanClass = null;
         }
+
         return bean;
     }
 
@@ -86,4 +93,13 @@ public class SpringAnnotationScanner implements BeanPostProcessor {
         return bean;
     }
 
+    private String getNamespace(Object bean) {
+        String namespace = "";
+        Annotation annotation = AnnotationUtils.findAnnotation(bean.getClass(), Namespace.class);
+        if (annotation != null) {
+            namespace = (String) AnnotationUtils.getValue(annotation);
+        }
+
+        return namespace;
+    }
 }
