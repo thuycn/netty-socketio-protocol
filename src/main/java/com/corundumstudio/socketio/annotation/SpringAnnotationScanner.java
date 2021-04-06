@@ -57,7 +57,8 @@ public class SpringAnnotationScanner implements BeanPostProcessor {
                 namespace.isEmpty() ? socketIOServer : socketIOServer.addNamespace(namespace);
             clientListeners.addListeners(bean, originalBeanClass);
 
-            log.info("{} bean listeners added", beanName);
+            log.info("{} bean listeners added into namespace {}", beanName, namespace);
+
             originalBeanClass = null;
         }
 

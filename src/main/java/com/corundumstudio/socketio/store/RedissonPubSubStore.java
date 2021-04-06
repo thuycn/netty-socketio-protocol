@@ -35,30 +35,36 @@ public class RedissonPubSubStore implements PubSubStore {
     private final RedissonClient redissonPub;
     private final RedissonClient redissonSub;
     private final Long nodeId;
+    private final String topicPrefix;
 
     private final ConcurrentMap<String, Queue<Integer>> map = PlatformDependent.newConcurrentHashMap();
 
-    public RedissonPubSubStore(RedissonClient redissonPub, RedissonClient redissonSub, Long nodeId) {
+    public RedissonPubSubStore(RedissonClient redissonPub, RedissonClient redissonSub, Long nodeId, String topicPrefix) {
         this.redissonPub = redissonPub;
         this.redissonSub = redissonSub;
         this.nodeId = nodeId;
+        this.topicPrefix = topicPrefix;
+    }
+
+    public RedissonPubSubStore(RedissonClient redissonPub, RedissonClient redissonSub, Long nodeId) {
+        this(redissonPub, redissonSub, nodeId, "");
     }
 
     @Override
     public void publish(PubSubType type, PubSubMessage msg) {
         msg.setNodeId(nodeId);
-        redissonPub.getTopic(type.toString()).publish(msg);
+        redissonPub.getTopic(topicName(type.toString())).publish(msg);
     }
 
     @Override
     public <T extends PubSubMessage> void subscribe(PubSubType type, final PubSubListener<T> listener, Class<T> clazz) {
         String name = type.toString();
-        RTopic topic = redissonSub.getTopic(name);
+        RTopic topic = redissonSub.getTopic(topicName(name));
         int regId = topic.addListener(PubSubMessage.class, new MessageListener<PubSubMessage>() {
             @Override
             public void onMessage(CharSequence channel, PubSubMessage msg) {
                 if (!nodeId.equals(msg.getNodeId())) {
-                    listener.onMessage((T)msg);
+                    listener.onMessage((T) msg);
                 }
             }
         });
@@ -78,7 +84,7 @@ public class RedissonPubSubStore implements PubSubStore {
     public void unsubscribe(PubSubType type) {
         String name = type.toString();
         Queue<Integer> regIds = map.remove(name);
-        RTopic topic = redissonSub.getTopic(name);
+        RTopic topic = redissonSub.getTopic(topicName(name));
         for (Integer id : regIds) {
             topic.removeListener(id);
         }
@@ -88,4 +94,7 @@ public class RedissonPubSubStore implements PubSubStore {
     public void shutdown() {
     }
 
+    private String topicName(String name) {
+        return this.topicPrefix != null ? this.topicPrefix + name : name;
+    }
 }

@@ -37,19 +37,27 @@ public class RedissonStoreFactory extends BaseStoreFactory {
     }
 
     public RedissonStoreFactory(RedissonClient redisson) {
+        this(redisson, "");
+    }
+
+    public RedissonStoreFactory(RedissonClient redisson, String topicPrefix) {
         this.redisClient = redisson;
         this.redisPub = redisson;
         this.redisSub = redisson;
 
-        this.pubSubStore = new RedissonPubSubStore(redisPub, redisSub, getNodeId());
+        this.pubSubStore = new RedissonPubSubStore(redisPub, redisSub, getNodeId(), topicPrefix);
     }
 
     public RedissonStoreFactory(Redisson redisClient, Redisson redisPub, Redisson redisSub) {
+        this(redisClient, redisPub, redisSub, "");
+    }
+
+    public RedissonStoreFactory(Redisson redisClient, Redisson redisPub, Redisson redisSub, String topicPrefix) {
         this.redisClient = redisClient;
         this.redisPub = redisPub;
         this.redisSub = redisSub;
 
-        this.pubSubStore = new RedissonPubSubStore(redisPub, redisSub, getNodeId());
+        this.pubSubStore = new RedissonPubSubStore(redisPub, redisSub, getNodeId(), topicPrefix);
     }
 
     @Override
