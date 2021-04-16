@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.corundumstudio.socketio</groupId>
-  <artifactId>netty-socketio</artifactId>
+  <artifactId>netty-socketio-protocol</artifactId>
   <version>1.7.19-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>NettySocketIO</name>
@@ -60,6 +60,7 @@
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+    <netty-buffer.version>4.1.50.Final</netty-buffer.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <skipTests>true</skipTests>
   </properties>
@@ -95,6 +96,11 @@
   </profiles>
 
   <dependencies>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-buffer</artifactId>
+      <version>${netty-buffer.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
