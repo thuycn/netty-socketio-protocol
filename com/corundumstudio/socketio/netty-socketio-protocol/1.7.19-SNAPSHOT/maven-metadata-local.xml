@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.corundumstudio.socketio</groupId>
+  <artifactId>netty-socketio-protocol</artifactId>
+  <version>1.7.19-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <lastUpdated>20210416055004</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <classifier>javadoc</classifier>
+        <extension>jar</extension>
+        <value>1.7.19-SNAPSHOT</value>
+        <updated>20210416055004</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>sources</classifier>
+        <extension>jar</extension>
+        <value>1.7.19-SNAPSHOT</value>
+        <updated>20210416055004</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.7.19-SNAPSHOT</value>
+        <updated>20210416055004</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.7.19-SNAPSHOT</value>
+        <updated>20210416055004</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
